@@ -1,0 +1,24 @@
+{
+  "name": "@fwh/react-pdfjs",
+  "version": "1.0.0-development",
+  "main": "index.js",
+  "repository": "git@github.com:ofhouse/react-pdfjs.git",
+  "author": "Felix Haus <felixhaus@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "peerDependencies": {
+    "react": "^16.0.0-0"
+  },
+  "devDependencies": {
+    "@babel/core": "7.1.0",
+    "@babel/plugin-proposal-class-properties": "7.1.0",
+    "@babel/preset-env": "7.1.0",
+    "@babel/preset-flow": "7.0.0",
+    "@babel/preset-react": "7.0.0",
+    "rollup": "0.66.1",
+    "rollup-plugin-babel": "4.0.3",
+    "rollup-plugin-postcss": "1.6.2"
+  }
+}
