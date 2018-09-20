@@ -10,7 +10,7 @@ export default {
       react: 'React',
     },
 
-    file: 'build/index.js',
+    file: 'dist/index.js',
     format: 'cjs',
   },
 
