@@ -8,8 +8,8 @@
 
 import * as React from 'react';
 import pdfjsLib from 'pdfjs-dist';
-import { PDFViewer } from 'pdfjs-dist/lib/web/pdf_viewer';
 
+import ReactPDFJSViewer from './lib/react-pdfjs-viewer';
 import { withPdfJsContext } from './react-pdfjs';
 
 import type { ViewerContext } from './types';
@@ -28,7 +28,7 @@ function isObjectEqual(obj1, obj2) {
 
 class Viewer extends React.Component<Props> {
   // Typings
-  pdfViewer: PDFViewer;
+  pdfViewer: typeof ReactPDFJSViewer;
 
   container = React.createRef();
   viewer = React.createRef();
@@ -39,9 +39,10 @@ class Viewer extends React.Component<Props> {
     const viewerOptions = {
       container: this.container.current,
       viewer: this.viewer.current,
+      getAnnotationsForPage: this.props.reactPdfjs.getAnnotationsForPage,
     };
 
-    this.pdfViewer = new PDFViewer(viewerOptions);
+    this.pdfViewer = new ReactPDFJSViewer(viewerOptions);
   }
 
   componentDidMount() {

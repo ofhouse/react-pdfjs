@@ -25,6 +25,7 @@ const MAX_SCALE = 10.0;
 
 type Props = {
   file: string,
+  annotationsForPage: () => any,
   children: React.Node,
 };
 
@@ -86,6 +87,7 @@ class ReactPdfjs extends React.Component<Props, State> {
         file: this.props.file,
         currentScaleValue: 1.0,
         currentPage: {},
+        getAnnotationsForPage: this.props.annotationsForPage,
       },
       toolbarContext: {
         zoomIn: this.zoomIn,
