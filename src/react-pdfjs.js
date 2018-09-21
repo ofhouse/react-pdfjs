@@ -11,11 +11,14 @@ const PdfjsContext = React.createContext({});
 const withPdfJsContext = (
   Component: React.ComponentType<any>,
   contextType: string = 'toolbarContext'
-) => (props: any) => (
-  <PdfjsContext.Consumer>
-    {(context: ReactContext) => <Component {...props} reactPdfjs={context[contextType]} />}
-  </PdfjsContext.Consumer>
-);
+) =>
+  React.forwardRef((props: any, ref) => (
+    <PdfjsContext.Consumer>
+      {(context: ReactContext) => (
+        <Component {...props} reactPdfjs={context[contextType]} ref={ref} />
+      )}
+    </PdfjsContext.Consumer>
+  ));
 
 // Constants
 const DEFAULT_SCALE_DELTA = 1.1;
