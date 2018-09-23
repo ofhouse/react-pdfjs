@@ -8,7 +8,7 @@ import './app.css';
 import PdfToolbar from './components/pdf-toolbar';
 
 const pathToPDFWorker = 'https://unpkg.com/pdfjs-dist@2.0.489/build/pdf.worker.min.js';
-const pathToPdf = './helloworld.pdf';
+const pathToPdf = './test.pdf';
 
 const Wrapper = styled.div`
   flex: 1;
@@ -23,7 +23,17 @@ const ViewerContainer = styled.div`
 `;
 
 class App extends React.Component {
-  annotationsForPage = async () => {
+  state = {
+    annotations: {
+      '1': [
+        {
+          title: 'test',
+        },
+      ],
+    },
+  };
+
+  annotationsForPage = () => {
     return [
       {
         offsetX: 50,
@@ -42,12 +52,13 @@ class App extends React.Component {
       <Wrapper>
         <PDFJS
           file={pathToPdf}
+          annotations={this.state.annotations}
           annotationsForPage={this.annotationsForPage}
           workerSrc={pathToPDFWorker}
         >
           <PdfToolbar />
           <ViewerContainer>
-            <Viewer />
+            <Viewer renderAnnotation={() => <div>xd</div>} />
           </ViewerContainer>
         </PDFJS>
       </Wrapper>

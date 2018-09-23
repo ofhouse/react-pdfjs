@@ -13,6 +13,7 @@ class AnnotationLayerBuilder {
     imageResourcesPath = '',
     renderInteractiveForms = false,
     getAnnotationsForPage,
+    renderAnnotation,
   }) {
     this.pageDiv = pageDiv;
     this.pdfPage = pdfPage;
@@ -20,6 +21,7 @@ class AnnotationLayerBuilder {
     this.imageResourcesPath = imageResourcesPath;
     this.renderInteractiveForms = renderInteractiveForms;
     this.getAnnotationsForPage = getAnnotationsForPage;
+    this.renderAnnotation = renderAnnotation;
 
     this.div = null;
     this._cancelled = false;
@@ -34,7 +36,9 @@ class AnnotationLayerBuilder {
       this.div = document.createElement('div');
       this.div.className = 'annotationLayer';
       this.pageDiv.appendChild(this.div);
-      ReactDOM.render(<ReactAnnotationLayer annotations={this.annotations} />, this.div);
+
+      const AnnotationLayer = this.renderAnnotation;
+      ReactDOM.render(<AnnotationLayer annotations={this.annotations} />, this.div);
     }
   }
 

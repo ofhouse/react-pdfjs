@@ -5,20 +5,8 @@
  */
 import * as React from 'react';
 
+import { Provider } from './context';
 import type { ReactContext } from './types';
-
-const PdfjsContext = React.createContext({});
-const withPdfJsContext = (
-  Component: React.ComponentType<any>,
-  contextType: string = 'toolbarContext'
-) =>
-  React.forwardRef((props: any, ref) => (
-    <PdfjsContext.Consumer>
-      {(context: ReactContext) => (
-        <Component {...props} reactPdfjs={context[contextType]} ref={ref} />
-      )}
-    </PdfjsContext.Consumer>
-  ));
 
 // Constants
 const DEFAULT_SCALE_DELTA = 1.1;
@@ -27,6 +15,7 @@ const MIN_SCALE = 0.1;
 const MAX_SCALE = 10.0;
 
 type Props = {
+  annotations: any,
   annotationsForPage: () => any,
   children: React.Node,
   file: string,
@@ -93,6 +82,7 @@ class ReactPdfjs extends React.Component<Props, State> {
         currentPage: {},
         getAnnotationsForPage: this.props.annotationsForPage,
         workerSrc: this.props.workerSrc || null,
+        annotations: this.props.annotations,
       },
       toolbarContext: {
         zoomIn: this.zoomIn,
@@ -103,12 +93,8 @@ class ReactPdfjs extends React.Component<Props, State> {
   };
 
   render() {
-    return (
-      <PdfjsContext.Provider value={this.state.context}>
-        {this.props.children}
-      </PdfjsContext.Provider>
-    );
+    return <Provider value={this.state.context}>{this.props.children}</Provider>;
   }
 }
 
-export { ReactPdfjs, withPdfJsContext };
+export { ReactPdfjs };

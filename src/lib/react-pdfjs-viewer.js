@@ -13,6 +13,7 @@ class ReactPDFJSViewer extends PDFViewer {
     super(options);
 
     this.getAnnotationsForPage = options.getAnnotationsForPage;
+    this.renderAnnotation = options.renderAnnotation;
   }
 
   createAnnotationLayerBuilder(
@@ -30,6 +31,7 @@ class ReactPDFJSViewer extends PDFViewer {
       linkService: this.linkService,
       downloadManager: this.downloadManager,
       getAnnotationsForPage: this.getAnnotationsForPage,
+      renderAnnotation: this.renderAnnotation,
     });
   }
 }

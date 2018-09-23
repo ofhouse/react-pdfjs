@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 
-import { withPdfJsContext } from './react-pdfjs';
+import { withPdfJsContext } from './context';
 import type { ToolbarContext } from './types';
 
 type RenderProps = {
