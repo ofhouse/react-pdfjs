@@ -9,6 +9,7 @@ export type ToolbarContext = {
 export type ViewerContext = {
   file: string,
   currentScaleValue: number,
+  workerSrc: string | null,
   currentPage: {
     pageNumber?: number,
     destArray?: Array<any>,

@@ -18,15 +18,18 @@ type Props = {
   reactPdfjs: ViewerContext,
 };
 
-// Setting worker path to worker bundle.
-// pdfjsLib.GlobalWorkerOptions.workerSrc =
-//   '../../build/webpack/pdf.worker.bundle.js';
-
 function isObjectEqual(obj1, obj2) {
   return JSON.stringify(obj1) === JSON.stringify(obj2);
 }
 
 class Viewer extends React.Component<Props> {
+  constructor(props: Props) {
+    super(props);
+
+    // Set worker URL
+    pdfjsLib.GlobalWorkerOptions.workerSrc = props.reactPdfjs.workerSrc;
+  }
+
   // Typings
   pdfViewer: typeof ReactPDFJSViewer;
 
