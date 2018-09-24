@@ -50,8 +50,13 @@ class Viewer extends React.Component<Props> {
     this.pdfViewer = new ReactPDFJSViewer(viewerOptions);
   }
 
-  scrollPageIntoView = pageNumber => {
-    this.pdfViewer.scrollPageIntoView({ pageNumber });
+  scrollPageIntoView = (pageNumber, rect) => {
+    let dest = null;
+    if (rect) {
+      dest = [null, { name: 'XYZ' }, rect.x, rect.y, null];
+    }
+
+    this.pdfViewer.scrollPageIntoView({ pageNumber, destArray: dest });
   };
 
   componentDidMount() {
@@ -72,11 +77,20 @@ class Viewer extends React.Component<Props> {
 
   shouldComponentUpdate(nextProps) {
     // To updates on the pdfViewer
-    this.pdfViewer.currentScaleValue = nextProps.reactPdfjs.currentScaleValue;
+    if (this.props.reactPdfjs.currentScaleValue !== nextProps.reactPdfjs.currentScaleValue) {
+      try {
+        this.pdfViewer.currentScaleValue = nextProps.reactPdfjs.currentScaleValue;
+      } catch (err) {
+        // TODO: Try to find the error
+      }
+    }
 
     // Check if current page is changed
     if (!isObjectEqual(this.props.reactPdfjs.currentPage, nextProps.reactPdfjs.currentPage)) {
-      this.scrollPageIntoView(nextProps.reactPdfjs.currentPage.pageNumber);
+      this.scrollPageIntoView(
+        nextProps.reactPdfjs.currentPage.pageNumber,
+        nextProps.reactPdfjs.currentPage.rect
+      );
     }
 
     // Prevent rerender of the canvas

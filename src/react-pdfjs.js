@@ -44,9 +44,10 @@ class ReactPdfjs extends React.Component<Props, State> {
     });
   };
 
-  scrollToPage = (pageNumber: number) => {
+  scrollToPage = (pageNumber: number, rect: { x: number, y: number } | null = null) => {
     const params = {
       pageNumber,
+      rect,
     };
 
     this.updateViewerState('currentPage', params);

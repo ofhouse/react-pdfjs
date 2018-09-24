@@ -38,13 +38,20 @@ class AnnotationLayerBuilder {
       this.pageDiv.appendChild(this.div);
 
       const AnnotationLayer = this.renderAnnotation;
-      ReactDOM.render(<AnnotationLayer annotations={this.annotations} />, this.div);
+      ReactDOM.render(
+        <AnnotationLayer annotations={this.annotations} pdfPage={this.pdfPage} />,
+        this.div
+      );
     }
   }
 
   render(viewport, intent = 'display') {
     const annotations = this.getAnnotationsForPage(this.pdfPage.pageNumber);
     this.annotations = annotations;
+
+    if (this.div) {
+      this.show();
+    }
 
     // console.log({ annotations });
 

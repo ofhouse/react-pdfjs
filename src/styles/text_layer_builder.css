@@ -85,11 +85,10 @@
   direction: ltr;
   width: 816px;
   height: 1056px;
-  margin: 1px auto -8px auto;
+  margin: 48px auto 0;
   position: relative;
   overflow: visible;
-  border: 9px solid transparent;
+  border: none;
   background-clip: content-box;
-  /* border-image: url(images/shadow.png) 9 9 repeat; */
   background-color: white;
 }
