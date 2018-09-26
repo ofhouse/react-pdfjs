@@ -92,3 +92,7 @@
   background-clip: content-box;
   background-color: white;
 }
+
+.pdfViewer .page:last-child {
+  margin-bottom: 48px;
+}

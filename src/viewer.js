@@ -8,11 +8,18 @@
 
 import * as React from 'react';
 import pdfjsLib from 'pdfjs-dist';
+import { normalizeWheelEventDelta } from 'pdfjs-dist/lib/web/ui_utils';
 
 import ReactPDFJSViewer from './lib/react-pdfjs-viewer';
 import { withPdfJsContext } from './context';
 
 import type { ViewerContext } from './types';
+
+// Constants
+const DEFAULT_SCALE_DELTA = 1.1;
+
+const MIN_SCALE = 0.1;
+const MAX_SCALE = 10.0;
 
 type Props = {
   reactPdfjs: ViewerContext,
@@ -39,6 +46,90 @@ class Viewer extends React.Component<Props> {
 
   viewerCanvas = React.createRef();
 
+  zoomOut = (ticks: number = 0) => {
+    let newScale = this.pdfViewer.currentScale;
+    do {
+      newScale = parseFloat((newScale / DEFAULT_SCALE_DELTA).toFixed(2));
+      newScale = Math.floor(newScale * 10) / 10;
+      newScale = Math.max(MIN_SCALE, newScale);
+    } while (--ticks > 0 && newScale > MIN_SCALE);
+
+    try {
+      this.pdfViewer.currentScaleValue = newScale;
+    } catch (err) {
+      // TODO: Catch rotation error
+    }
+  };
+
+  zoomIn = (ticks: number = 0) => {
+    let newScale = this.pdfViewer.currentScale;
+    do {
+      newScale = parseFloat((newScale * DEFAULT_SCALE_DELTA).toFixed(2));
+      newScale = Math.ceil(newScale * 10) / 10;
+      newScale = Math.min(MAX_SCALE, newScale);
+    } while (--ticks > 0 && newScale < MAX_SCALE);
+
+    try {
+      this.pdfViewer.currentScaleValue = newScale;
+    } catch (err) {
+      // TODO: Catch rotation error
+    }
+  };
+
+  webViewerWheel = evt => {
+    const container = this.container.current;
+
+    const pdfViewer = this.pdfViewer;
+    if (pdfViewer.isInPresentationMode) {
+      return;
+    }
+
+    if (evt.ctrlKey || evt.metaKey) {
+      // Only zoom the pages, not the entire viewer.
+      evt.preventDefault();
+
+      let previousScale = pdfViewer.currentScale;
+
+      let delta = normalizeWheelEventDelta(evt);
+
+      const MOUSE_WHEEL_DELTA_PER_PAGE_SCALE = 3.0;
+      let ticks = delta * MOUSE_WHEEL_DELTA_PER_PAGE_SCALE;
+      if (ticks < 0) {
+        this.zoomOut(-ticks);
+      } else {
+        this.zoomIn(ticks);
+      }
+
+      let currentScale = pdfViewer.currentScale;
+      if (previousScale !== currentScale) {
+        // After scaling the page via zoomIn/zoomOut, the position of the upper-
+        // left corner is restored. When the mouse wheel is used, the position
+        // under the cursor should be restored instead.
+        let scaleCorrectionFactor = currentScale / previousScale - 1;
+        let rect = container.getBoundingClientRect();
+        let dx = evt.clientX - rect.left;
+        let dy = evt.clientY - rect.top;
+        container.scrollLeft += dx * scaleCorrectionFactor;
+        container.scrollTop += dy * scaleCorrectionFactor;
+      }
+    }
+  };
+
+  bindEvents = () => {
+    const container = this.container.current;
+
+    window.addEventListener('wheel', this.webViewerWheel);
+
+    // automatically find the right scaling for the pages
+    container.addEventListener('pagesinit', () => {
+      this.pdfViewer.currentScaleValue = 'auto';
+    });
+  };
+
+  unbindEvents = () => {
+    window.removeEventListener('wheel', this.webViewerWheel);
+  };
+
   initialize() {
     const viewerOptions = {
       container: this.container.current,
@@ -53,7 +144,7 @@ class Viewer extends React.Component<Props> {
   scrollPageIntoView = (pageNumber, rect) => {
     let dest = null;
     if (rect) {
-      dest = [null, { name: 'XYZ' }, rect.x, rect.y, null];
+      dest = [null, { name: 'FitR' }, rect.x, rect.y, rect.width, rect.width, rect.height];
     }
 
     this.pdfViewer.scrollPageIntoView({ pageNumber, destArray: dest });
@@ -73,6 +164,12 @@ class Viewer extends React.Component<Props> {
         // TODO: Error handling
         console.log(err);
       });
+
+    this.bindEvents();
+  }
+
+  componentWillUnmount() {
+    this.unbindEvents();
   }
 
   shouldComponentUpdate(nextProps) {
