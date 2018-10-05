@@ -14,6 +14,14 @@ export default {
     format: 'cjs',
   },
 
+  external: [
+    'pdfjs-dist',
+    'pdfjs-dist/lib/web/ui_utils',
+    'pdfjs-dist/lib/web/pdf_viewer',
+    'react',
+    'react-dom',
+  ],
+
   plugins: [
     babel({
       exclude: 'node_modules/**',
