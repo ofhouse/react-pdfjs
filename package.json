@@ -12,10 +12,12 @@
     "build": "rollup -c"
   },
   "peerDependencies": {
-    "react": "^16.0.0-0"
+    "react": ">=16.0.0",
+    "react-dom": ">=16.0.0"
   },
   "dependencies": {
-    "pdfjs-dist": "^2.0.489"
+    "babel-runtime": "^6.26.0",
+    "pdfjs-dist": "2.0.943"
   },
   "devDependencies": {
     "@babel/core": "7.1.0",
@@ -24,6 +26,8 @@
     "@babel/preset-flow": "7.0.0",
     "@babel/preset-react": "7.0.0",
     "flow-bin": "^0.81.0",
+    "react": "16.8.4",
+    "react-dom": "16.8.4",
     "rollup": "0.66.1",
     "rollup-plugin-babel": "4.0.3",
     "rollup-plugin-postcss": "1.6.2"

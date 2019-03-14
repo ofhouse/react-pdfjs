@@ -18,7 +18,6 @@ type Props = {
   annotations: any,
   annotationsForPage: () => any,
   children: React.Node,
-  file: string,
   workerSrc?: string,
 };
 
@@ -78,7 +77,6 @@ class ReactPdfjs extends React.Component<Props, State> {
   state = {
     context: {
       viewerContext: {
-        file: this.props.file,
         currentScaleValue: 1.0,
         currentPage: {},
         getAnnotationsForPage: this.props.annotationsForPage,

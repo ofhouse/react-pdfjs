@@ -24,6 +24,7 @@ const MAX_SCALE = 10.0;
 type Props = {
   reactPdfjs: ViewerContext,
   renderAnnotation: React.ReactNode,
+  file: string,
 };
 
 function isObjectEqual(obj1, obj2) {
@@ -150,12 +151,9 @@ class Viewer extends React.Component<Props> {
     this.pdfViewer.scrollPageIntoView({ pageNumber, destArray: dest });
   };
 
-  componentDidMount() {
-    // Initialize the viewer
-    this.initialize();
-
+  loadFile(file: string) {
     // Load the file into the viewer
-    const loadingTask = pdfjsLib.getDocument(this.props.reactPdfjs.file);
+    const loadingTask = pdfjsLib.getDocument(file);
     loadingTask.promise
       .then(pdfDocument => {
         this.pdfViewer.setDocument(pdfDocument);
@@ -164,6 +162,12 @@ class Viewer extends React.Component<Props> {
         // TODO: Error handling
         console.log(err);
       });
+  }
+
+  componentDidMount() {
+    // Initialize the viewer
+    this.initialize();
+    this.loadFile(this.props.file);
 
     this.bindEvents();
   }
@@ -188,6 +192,11 @@ class Viewer extends React.Component<Props> {
         nextProps.reactPdfjs.currentPage.pageNumber,
         nextProps.reactPdfjs.currentPage.rect
       );
+    }
+
+    // File in the viewer has changed
+    if (nextProps.file !== this.props.file) {
+      this.loadFile(nextProps.file);
     }
 
     // Prevent rerender of the canvas
