@@ -1,22 +1,22 @@
 {
-  "name": "pdfjs-demo",
-  "version": "0.1.0",
+  "name": "react-pdfjs-demo",
+  "version": "0.0.0",
   "private": true,
-  "main": "./src/react-pdfjs/index.js",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
   "dependencies": {
     "pdfjs-dist": "2.0.489",
-    "react": "^16.5.1",
-    "react-dom": "^16.5.1",
-    "react-scripts": "1.1.5",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "react-scripts": "5.0.1",
     "styled-components": "3.4.6"
   },
   "devDependencies": {
-    "flow-bin": "0.81.0"
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "typescript": "^4.6.4"
   }
 }

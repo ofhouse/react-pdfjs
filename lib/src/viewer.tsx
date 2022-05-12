@@ -2,8 +2,6 @@
  * React-PDFJS Viewer
  *
  * Provides the canvas where the pdf is rendered in
- *
- * @flow
  */
 
 import * as React from 'react';

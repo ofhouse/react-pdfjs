@@ -1,35 +1,4 @@
 {
-  "name": "@fwh/react-pdfjs",
-  "version": "1.0.0-alpha-2",
-  "main": "dist/index.js",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ofhouse/react-pdfjs.git"
-  },
-  "author": "Felix Haus <felixhaus@gmail.com>",
-  "license": "MIT",
-  "scripts": {
-    "build": "rollup -c"
-  },
-  "peerDependencies": {
-    "react": ">=16.0.0",
-    "react-dom": ">=16.0.0"
-  },
-  "dependencies": {
-    "babel-runtime": "^6.26.0",
-    "pdfjs-dist": "2.0.943"
-  },
-  "devDependencies": {
-    "@babel/core": "7.1.0",
-    "@babel/plugin-proposal-class-properties": "7.1.0",
-    "@babel/preset-env": "7.1.0",
-    "@babel/preset-flow": "7.0.0",
-    "@babel/preset-react": "7.0.0",
-    "flow-bin": "^0.81.0",
-    "react": "16.8.4",
-    "react-dom": "16.8.4",
-    "rollup": "0.66.1",
-    "rollup-plugin-babel": "4.0.3",
-    "rollup-plugin-postcss": "1.6.2"
-  }
+  "name": "react-pdfjs-workspace",
+  "private": true
 }
