@@ -8,6 +8,7 @@
     "eject": "react-scripts eject"
   },
   "dependencies": {
+    "@fwh/react-pdfjs": "*",
     "pdfjs-dist": "2.0.489",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
