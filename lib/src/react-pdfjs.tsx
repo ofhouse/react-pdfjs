@@ -5,14 +5,15 @@
 import * as React from 'react';
 import { useReducer, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
-import pdfjsLib from 'pdfjs-dist';
+import * as pdfjsLib from 'pdfjs-dist';
 import { PDFViewer } from 'pdfjs-dist/lib/web/pdf_viewer';
 
 import { createContext } from './utils/create-context';
+import { createStore } from './create-store';
 
 /* -----------------------------------------------------------------------------
-* Document
-* ---------------------------------------------------------------------------*/
+ * Document
+ * ---------------------------------------------------------------------------*/
 
 type ContextValue = {
   /**
@@ -141,7 +142,25 @@ function generateInitializeState(): State {
 
 /* ---------------------------------------------------------------------------*/
 
-type ReactPDFJsProviderProps = {
+type AnnotationBox = {
+  offsetX: number;
+  offsetY: number;
+  width: number;
+  height: number;
+  backgroundColor: string;
+  borderWidth: string;
+  borderColor: string;
+};
+
+type DocumentProps = {
+  /**
+   * Annotations that should be available on a page.
+   */
+  annotations: Record<string, any[]>;
+  /**
+   * Return the annotations that should be shown on the current page.
+   */
+  annotationsForPage: () => AnnotationBox[];
   /**
    * Max factor until that a document can be zoomed in.
    */
@@ -155,15 +174,17 @@ type ReactPDFJsProviderProps = {
    */
   scaleDelta?: number;
   workerSrc?: string;
+  file: string;
 };
 
 function Document({
+  file,
   maxScale = 10,
   minScale = 0.1,
   scaleDelta = 1.1,
   workerSrc,
   children,
-}: React.PropsWithChildren<ReactPDFJsProviderProps>) {
+}: React.PropsWithChildren<DocumentProps>) {
   const [state, send] = useReducer(reducer, undefined, generateInitializeState);
 
   const scrollToPage = (
@@ -455,33 +476,36 @@ class ReactPDFJSViewer extends PDFViewer {
  * Viewer
  * ---------------------------------------------------------------------------*/
 
-function Viewer() {
+type ViewerProps = {
+  renderAnnotation: () => JSX.Element;
+};
+
+function Viewer({ renderAnnotation }: ViewerProps) {
   const { workerSrc } = useContext('Viewer');
   const containerRef = useRef<HTMLDivElement>();
   const viewerRef = useRef<HTMLDivElement>();
   const viewerCanvasRef = useRef();
   const isInitializedRef = useRef(false);
   const pdfViewerRef = useRef<ReactPDFJSViewer | null>(null);
+  const eventBusRef = useRef(createStore((state) => state, {}));
 
-  useEffect(
-    () => {
-      // Set worker URL
-      if (workerSrc) {
-        pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc;
-      }
+  useEffect(() => {
+    // Set worker URL
+    if (workerSrc) {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc;
+    }
 
-      // Initialize the PDFJS Viewer
-      if (!isInitializedRef.current) {
-        pdfViewerRef.current = new ReactPDFJSViewer({
-          container: containerRef.current,
-          viewer: viewerRef.current,
-          renderAnnotation: () => {},
-          getAnnotationsForPage: () => {},
-        });
-      }
-    },
-    [workerSrc]
-  );
+    // Initialize the PDFJS Viewer
+    if (!isInitializedRef.current) {
+      pdfViewerRef.current = new ReactPDFJSViewer({
+        container: containerRef.current,
+        viewer: viewerRef.current,
+        renderAnnotation,
+        getAnnotationsForPage: () => {},
+        eventBus: eventBusRef.current,
+      });
+    }
+  }, [workerSrc, renderAnnotation]);
 
   return (
     <div
