@@ -8,7 +8,7 @@ import './App.css';
 // import PdfToolbar from './components/pdf-toolbar';
 
 const pathToPDFWorker =
-  'https://unpkg.com/pdfjs-dist@2.0.489/build/pdf.worker.min.js';
+  'https://unpkg.com/pdfjs-dist@2.14.305/build/pdf.worker.min.js';
 const pathToPdf = './test.pdf';
 
 function App() {

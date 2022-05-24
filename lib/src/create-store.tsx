@@ -21,6 +21,7 @@ function createStore(reducer, initialState) {
     unSubscribe,
     getState,
     dispatch,
+    _on: () => {},
   };
 }
 

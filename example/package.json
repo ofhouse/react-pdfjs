@@ -9,15 +9,14 @@
   },
   "dependencies": {
     "@fwh/react-pdfjs": "*",
-    "pdfjs-dist": "2.0.489",
+    "pdfjs-dist": "2.14.305",
     "react": "^18.1.0",
-    "react-dom": "^18.1.0",
-    "react-scripts": "5.0.1",
-    "styled-components": "3.4.6"
+    "react-dom": "^18.1.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
+    "react-scripts": "5.0.1",
     "typescript": "^4.6.4"
   },
   "browserslist": {

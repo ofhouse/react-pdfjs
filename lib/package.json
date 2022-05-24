@@ -20,7 +20,7 @@
   "devDependencies": {
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
-    "pdfjs-dist": "^2.0.943",
+    "pdfjs-dist": "2.14.305",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "typescript": "^4.6.4"

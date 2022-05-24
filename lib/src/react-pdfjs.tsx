@@ -3,7 +3,7 @@
  */
 
 import * as React from 'react';
-import { useReducer, useEffect, useRef } from 'react';
+import { useEffect, useState, useReducer, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import * as pdfjsLib from 'pdfjs-dist';
 import { PDFViewer } from 'pdfjs-dist/lib/web/pdf_viewer';
@@ -24,6 +24,7 @@ type ContextValue = {
    * The current page that is displayed.
    */
   currentPage: any;
+  file: string;
   getAnnotationsForPage: any;
   workerSrc?: string;
   annotations: any;
@@ -224,9 +225,10 @@ function Document({
 
   return (
     <Provider
+      annotations={undefined}
       currentScaleValue={state.currentScaleValue}
       currentPage={state.currentPage}
-      annotations={undefined}
+      file={file}
       getAnnotationsForPage={() => {}}
       workerSrc={workerSrc}
       scrollToPage={scrollToPage}
@@ -481,7 +483,8 @@ type ViewerProps = {
 };
 
 function Viewer({ renderAnnotation }: ViewerProps) {
-  const { workerSrc } = useContext('Viewer');
+  const [viewerInitialized, setViewerInitialized] = useState(false);
+  const { workerSrc, file } = useContext('Viewer');
   const containerRef = useRef<HTMLDivElement>();
   const viewerRef = useRef<HTMLDivElement>();
   const viewerCanvasRef = useRef();
@@ -504,8 +507,30 @@ function Viewer({ renderAnnotation }: ViewerProps) {
         getAnnotationsForPage: () => {},
         eventBus: eventBusRef.current,
       });
+      isInitializedRef.current = true;
+      setViewerInitialized(true);
     }
   }, [workerSrc, renderAnnotation]);
+
+  useEffect(() => {
+    function loadFile(fileUrl: string) {
+      const loadingTask = pdfjsLib.getDocument(fileUrl);
+
+      loadingTask.promise
+        .then((pdfDocument) => {
+          // @ts-ignore
+          pdfViewerRef.current.setDocument(pdfDocument);
+        })
+        .catch((err) => {
+          // TODO: Error handling
+          console.log(err);
+        });
+    }
+
+    if (viewerInitialized && pdfViewerRef.current) {
+      loadFile(file);
+    }
+  }, [viewerInitialized, file]);
 
   return (
     <div
