@@ -2,10 +2,10 @@ import { Document, Viewer, Toolbar } from '@fwh/react-pdfjs';
 import * as React from 'react';
 import { useState } from 'react';
 
-// import '@fwh/react-pdfjs/dist/index.css';
+import '@fwh/react-pdfjs/style.css';
 import './App.css';
 
-// import PdfToolbar from './components/pdf-toolbar';
+import { PdfToolbar } from './components/toolbar/toolbar';
 
 const pathToPDFWorker =
   'https://unpkg.com/pdfjs-dist@2.14.305/build/pdf.worker.min.js';
@@ -42,7 +42,7 @@ function App() {
         annotationsForPage={annotationsForPage}
         workerSrc={pathToPDFWorker}
       >
-        {/* <PdfToolbar /> */}
+        <PdfToolbar />
         <div className="viewer-container">
           <Viewer renderAnnotation={() => <div>xd</div>} />
         </div>
